@@ -1,4 +1,5 @@
 import { getAuth, signOut } from "firebase/auth";
+import MyLinks from '../MyLinks'
 
 const LoggedIn = ({ currentUser, setIsLogged }) => {
   const auth = getAuth()
@@ -6,9 +7,7 @@ const LoggedIn = ({ currentUser, setIsLogged }) => {
   const logoff = () => {
     signOut(auth).then(() => {
       setIsLogged(false)
-    }).catch((error) => {
-      // An error happened.
-    });
+    }).catch((error) => {});
   }
 
   return <div className="rb-logged-in">
@@ -27,6 +26,8 @@ const LoggedIn = ({ currentUser, setIsLogged }) => {
     </header>
     <div style={{textAlign: 'center'}}>
       <h1>Seja bem vindo, {currentUser.displayName}!</h1>
+
+      <MyLinks user={currentUser} />
     </div>
   </div>
 }

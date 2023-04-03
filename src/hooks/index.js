@@ -13,10 +13,10 @@ const firebaseConfig = {
   measurementId: "G-167B4LBYW7"
 }
 
-const app = initializeApp(firebaseConfig)
-const auth = getAuth(app)
-
 const useApp = () => {
+  const app = initializeApp(firebaseConfig)
+  const auth = getAuth(app)
+
   const [currentUser, setCurrentUser] = useState()
   const [isLoading, setIsLoading] = useState(true)
   const [isLogged, setIsLogged] = useState(false)
