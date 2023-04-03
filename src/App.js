@@ -1,23 +1,17 @@
-import logo from './logo.svg';
+import LoggedIn from './components/LoggedIn';
+import LoggedOut from './components/LoggedOut';
+import useApp from './hooks'
 import './App.css';
 
 function App() {
+  const { isLoading, isLogged, setIsLogged, currentUser, setCurrentUser } = useApp()
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={`rb ${!isLoading ? '--hide-loading' : ''}`}>
+      {
+        isLoading ? 'loading ...' :
+        isLogged ? <LoggedIn currentUser={currentUser} setIsLogged={setIsLogged} /> : <LoggedOut setIsLogged={setIsLogged} />
+      }
     </div>
   );
 }
