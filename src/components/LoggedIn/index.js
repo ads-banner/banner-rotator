@@ -1,6 +1,6 @@
 import { getAuth, signOut } from "firebase/auth";
 import { LogoutOutlined } from '@ant-design/icons'
-import { Breadcrumb, Layout, Menu, theme, Space, Button } from 'antd';
+import { Breadcrumb, Layout, Menu, theme, Space, Button, FloatButton } from 'antd';
 import MyLinks from '../MyLinks'
 import './style.css'
 
@@ -25,9 +25,6 @@ const LoggedIn = ({ currentUser, setIsLogged }) => {
         <Sider className="rb-sider-user">
           <img src={currentUser.photoURL} referrerpolicy="no-referrer" style={{ maxWidth: '80px', borderRadius: '100px'}} />
           <h3>Seja bem vindo,<br />{currentUser.displayName}!</h3>
-          <Button type="primary" shape="round" onClick={logoff} icon={<LogoutOutlined />} size="small">
-            Sair
-          </Button>
         </Sider>
 
         <Layout>
@@ -40,6 +37,18 @@ const LoggedIn = ({ currentUser, setIsLogged }) => {
                 { key: 1, label: 'Home' },
                 { key: 2, label: 'Criar' },
               ]}
+            />
+            <FloatButton
+              icon={<LogoutOutlined />}
+              description="Sair"
+              shape="square"
+              type="primary"
+              onClick={logoff}
+              style={{
+                right: 20,
+                bottom: 'auto',
+                top: 12
+              }}
             />
           </Header>
 
