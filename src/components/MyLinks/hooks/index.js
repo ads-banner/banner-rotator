@@ -44,7 +44,7 @@ const useMyLinks = ({ user }) => {
       return {
         title: link.title,
         url: link.url,
-        midias: Object.keys(link.files).length
+        midias: Object.keys(link.files || []).length
       }
     })
 
@@ -53,19 +53,10 @@ const useMyLinks = ({ user }) => {
       .then((snapshot) => {
         if (snapshot.exists()) {
           const list = snapshot.val()
-    
+
           setLinks(parserLinks(list))
         } else {
           console.log("No data available")
-          // const updates = {};
-          // updates['/links/' + user.uid] = {
-          //   link1: {
-          //     title: 'Meu primeiro link logo que eu acesso'
-          //   }
-          // }
-
-          // const teste= update(dbRef, updates);
-          // console.log('teste', teste)
         }
       })
       .catch((error) => console.error(error))

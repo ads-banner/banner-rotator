@@ -26,19 +26,19 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%) scale(1) rotate(90deg);
   width: 450px;
   height: 450px;
   background: url(./logo-banner-rotator.png) no-repeat center center;
   background-size: cover;
   z-index: 11;
+  transform: translate(-50%, -50%) scale(1) rotate(90deg);
   transition: all 3s ease-in-out;
 }
 
 .rb.--hide-loading:before {
   opacity: 0;
   visibility: hidden;
-  transition-delay: 2s;
+  transition-delay: 1.5s;
 }
 
 .rb.--hide-loading:after {

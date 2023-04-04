@@ -2,6 +2,8 @@ import { getAuth, signOut } from "firebase/auth";
 import { LogoutOutlined } from '@ant-design/icons'
 import { Breadcrumb, Layout, Menu, theme, Space, Button, FloatButton } from 'antd';
 import MyLinks from '../MyLinks'
+import FormLink from '../FormLink'
+
 import './style.css'
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -60,6 +62,7 @@ const LoggedIn = ({ currentUser, setIsLogged }) => {
 
             <div style={{ background: colorBgContainer }}>
               <MyLinks user={currentUser} />
+              <FormLink user={currentUser} />
             </div>
           </Content>
 

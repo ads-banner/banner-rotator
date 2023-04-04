@@ -8,12 +8,8 @@ const useLoggedOut = ({ setIsLogged }) => {
 
   const handleLogin = () => {
     signInWithPopup(auth, provider)
-      .then((result) => {
-        console.log('handleLogin', { result })
-        setIsLogged(true)
-      }).catch((error) => {
-        console.log('handleLogin error', { error })
-      });
+      .then((result) => setIsLogged(true))
+      .catch((error) => {});
   }
   
   return {
