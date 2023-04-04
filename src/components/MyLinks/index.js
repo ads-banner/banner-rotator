@@ -23,15 +23,15 @@ const MyLinks = ({ user }) => {
           )
         } else {
           console.log("No data available")
-          const updates = {};
-          updates['/links/' + user.uid] = {
-            link1: {
-              title: 'Meu primeiro link logo que eu acesso'
-            }
-          }
+          // const updates = {};
+          // updates['/links/' + user.uid] = {
+          //   link1: {
+          //     title: 'Meu primeiro link logo que eu acesso'
+          //   }
+          // }
 
-          const teste= update(dbRef, updates);
-          console.log('teste', teste)
+          // const teste= update(dbRef, updates);
+          // console.log('teste', teste)
         }
       })
       .catch((error) => console.error(error))
@@ -48,10 +48,11 @@ const MyLinks = ({ user }) => {
 
   return <ul>
     {
-      links.map(link =>
-        <li>
+      links.map((link, index) =>
+        <li key={index} style={{display: 'flex', gap: '30px', padding: '10px', borderTop: '1px solid gray'}}>
             <h4>{link.title}</h4>
             <h5>{link.url}</h5>
+            <h6>Midias: {Object.keys(link.files).length}</h6>
         </li>
       )
     }

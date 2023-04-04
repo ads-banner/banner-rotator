@@ -41,15 +41,6 @@
   visibility: hidden;
 }
 
-.rb-button {
-  padding: 5px 10px;
-  background: green;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.rb-button.--red { background-color: red; }
-
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -59,10 +50,10 @@
   }
 }
 
-.rb-logged-out {
+/* .rb-logged-out {
   text-align: center;
 }
 
 .rb-logged-out h1 {
   padding-bottom: 20px;
-}
+} */

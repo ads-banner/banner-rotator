@@ -1,5 +1,10 @@
 import { getAuth, signOut } from "firebase/auth";
+import { LogoutOutlined } from '@ant-design/icons'
+import { Breadcrumb, Layout, Menu, theme, Space, Button } from 'antd';
 import MyLinks from '../MyLinks'
+import './style.css'
+
+const { Header, Content, Footer, Sider } = Layout;
 
 const LoggedIn = ({ currentUser, setIsLogged }) => {
   const auth = getAuth()
@@ -9,27 +14,51 @@ const LoggedIn = ({ currentUser, setIsLogged }) => {
       setIsLogged(false)
     }).catch((error) => {});
   }
+  
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
 
-  return <div className="rb-logged-in">
-    <header>
-      <ul style={{display: 'flex', listStyle: 'none', gap: '20px', padding: '10px', borderBottom: '2px solid #ddd'}}>
-        <li>
-          <img src={currentUser.photoURL} referrerpolicy="no-referrer" style={{borderRadius: '100px'}} />
-        </li>
-        <li>
-          <a>HOME</a>
-        </li>
-        <li>
-          <a className="rb-button --red" onClick={logoff}>DESLOGAR COM CARINHO</a>
-        </li>
-      </ul>
-    </header>
-    <div style={{textAlign: 'center'}}>
-      <h1>Seja bem vindo, {currentUser.displayName}!</h1>
+  return (
+    <Space className="rb-logged-in" direction="vertical" style={{ width: '100%' }} size={[0, 48]}>
+      <Layout style={{ minHeight: '100vh' }}>
+        <Sider className="rb-sider-user">
+          <img src={currentUser.photoURL} referrerpolicy="no-referrer" style={{ maxWidth: '80px', borderRadius: '100px'}} />
+          <h3>Seja bem vindo,<br />{currentUser.displayName}!</h3>
+          <Button type="primary" shape="round" onClick={logoff} icon={<LogoutOutlined />} size="small">
+            Sair
+          </Button>
+        </Sider>
 
-      <MyLinks user={currentUser} />
-    </div>
-  </div>
+        <Layout>
+          <Header>
+            <Menu
+              theme="dark"
+              mode="horizontal"
+              defaultSelectedKeys={['1']}
+              items={[
+                { key: 1, label: 'Home' },
+                { key: 2, label: 'Criar' },
+              ]}
+            />
+          </Header>
+
+          <Content style={{ padding: '0 50px' }}>
+            <Breadcrumb
+              style={{ margin: '16px 0' }}
+              items={[{title:'Home'}, {title: 'Banners'}]}
+            />
+
+            <div style={{ background: colorBgContainer }}>
+              <MyLinks user={currentUser} />
+            </div>
+          </Content>
+
+          <Footer style={{ textAlign: 'center' }}>Banner Rotator ©2023 Created by Palloi Hofmann</Footer>
+        </Layout>
+      </Layout>
+    </Space>
+  )
 }
 
 export default LoggedIn
