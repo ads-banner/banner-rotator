@@ -1,65 +1,47 @@
-import { getDatabase, ref, child, push, get, set, update } from 'firebase/database'
+import useFormLink from './hooks'
 
 import {
   Button,
-  Cascader,
-  DatePicker,
   Form,
   Input,
-  InputNumber,
-  Radio,
-  Select,
-  Switch,
-  TreeSelect,
+  Modal,
 } from 'antd';
 
-const FormLink = ({ user }) => {
-  // const app = getApp()
-  const db = getDatabase()
-  const dbRef = ref(db)
+const FormLink = ({ user, showAddLink, handleToggleShowAddLink }) => {
+  const { handleAddLink } = useFormLink({ user, handleToggleShowAddLink })
 
-  return <Form
-    labelCol={{
-      span: 4,
-    }}
-    wrapperCol={{
-      span: 14,
-    }}
-    layout="horizontal"
-    // initialValues={{
-    // }}
-    onValuesChange={(attrs) => { console.log('form', { attrs }) }}
-    onFinish={(attrs) => { 
-
-      const updates = {};
-      updates['/links/' + user.uid] = {
-        link1: {
-          title: attrs.title,
-          url: attrs.url,
-        }
-      }
-
-      push(dbRef, updates)
-      // const teste= ;
-      // console.log('teste', teste)
-    }}
-    size="large"
-    style={{
-      // maxWidth: 600,
-    }}
+  return <Modal
+    title="Modal 1000px width"
+    centered
+    footer={null}
+    open={showAddLink}
+    onCancel={handleToggleShowAddLink}
+    width={768}
   >
-    <Form.Item name="title" label="Title" rules={[{ required: true }]}>
-      <Input />
-    </Form.Item>
-    <Form.Item name="url" label="URL pública" rules={[{ required: true }]}>
-      <Input />
-    </Form.Item>
-    <Form.Item label=" ">
-      <Button type="primary" htmlType="submit">
-        Submit
-      </Button>
-    </Form.Item>
-  </Form>
+    <Form
+      labelCol={{
+        span: 4,
+      }}
+      wrapperCol={{
+        span: 14,
+      }}
+      layout="horizontal"
+      onFinish={handleAddLink}
+      size="large"
+    >
+      <Form.Item name="title" label="Title">
+        <Input />
+      </Form.Item>
+      <Form.Item name="url" label="URL pública">
+        <Input />
+      </Form.Item>
+      <Form.Item label=" ">
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+    </Form>
+  </Modal>
 }
 
 export default FormLink

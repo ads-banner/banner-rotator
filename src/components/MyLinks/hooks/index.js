@@ -42,6 +42,7 @@ const useMyLinks = ({ user }) => {
       const link = list[key]
 
       return {
+        key: key,
         title: link.title,
         url: link.url,
         midias: Object.keys(link.files || []).length
@@ -52,7 +53,10 @@ const useMyLinks = ({ user }) => {
     get(child(dbRef, `links/${user.uid}`))
       .then((snapshot) => {
         if (snapshot.exists()) {
+
           const list = snapshot.val()
+
+          // console.log(list)
 
           setLinks(parserLinks(list))
         } else {
@@ -63,6 +67,8 @@ const useMyLinks = ({ user }) => {
       .finally(() => setIsLoading(false))
   }, [])
   
+  console.log(links)
+
   return {
     isLoading,
     links,

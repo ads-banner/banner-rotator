@@ -15,7 +15,7 @@
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 10;
+  z-index: 100;
   background: #f5f5f5;
   background-size: 200px;
   transition: all 3s ease-in-out;
@@ -30,7 +30,7 @@
   height: 450px;
   background: url(./logo-banner-rotator.png) no-repeat center center;
   background-size: cover;
-  z-index: 11;
+  z-index: 101;
   transform: translate(-50%, -50%) scale(1) rotate(90deg);
   transition: all 3s ease-in-out;
 }
