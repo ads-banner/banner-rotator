@@ -1,21 +1,30 @@
-import { getDatabase, ref, child, get, set, update } from 'firebase/database'
+import { getDatabase, ref, onValue, update } from 'firebase/database'
 import { getApp } from 'firebase/app'
 import { useEffect, useState } from 'react'
 
 const useMyLinks = ({ user }) => {
-  const app = getApp()
-  const db = getDatabase(app)
-  const dbRef = ref(db)
-
   const [isLoading, setIsLoading] = useState(true)
   const [links, setLinks] = useState([])
+
+  const app = getApp()
+  const db = getDatabase(app)
+
+  const handleEditLink = ({ record }) => {
+    console.log('tyeste', record)
+    const linkRef = ref(db, `links/${user.uid}/${record.key}`)
+    update(linkRef, {
+      title: 'testeUpdate',
+      url: 'bosta.com.br'
+    })
+
+
+  }
 
   const columns = [
     {
       title: 'Titulo',
       dataIndex: 'title',
       key: 'title',
-      // render: (text) => <a>{text}</a>,
     },
     {
       title: 'Url pública',
@@ -31,7 +40,7 @@ const useMyLinks = ({ user }) => {
       title: 'Ações',
       key: 'action',
       render: (_, record) => (
-        <a title={record.name}>Editar</a>
+        <a title={record.name} onClick={() => { handleEditLink({record}) }}>Editar</a>
       ),
     },
   ];
@@ -50,24 +59,15 @@ const useMyLinks = ({ user }) => {
     })
 
   useEffect(() => {
-    get(child(dbRef, `links/${user.uid}`))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
+    const linksRef = ref(db, `links/${user.uid}`)
 
-          const list = snapshot.val()
+    onValue(linksRef, (snapshot) => {
+      const links = snapshot.val()
 
-          // console.log(list)
-
-          setLinks(parserLinks(list))
-        } else {
-          console.log("No data available")
-        }
-      })
-      .catch((error) => console.error(error))
-      .finally(() => setIsLoading(false))
+      setLinks(parserLinks(links || {}))
+      setIsLoading(false)
+    })
   }, [])
-  
-  console.log(links)
 
   return {
     isLoading,
