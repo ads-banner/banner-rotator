@@ -1,4 +1,4 @@
-import { ref, onValue, update } from 'firebase/database'
+import { ref, onValue } from 'firebase/database'
 import { useEffect, useState } from 'react'
 import { db } from 'config/firebase'
 
@@ -6,16 +6,7 @@ const useMyLinks = ({ user, setLink }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [links, setLinks] = useState([])
 
-  const handleEditLink = ({ record }) => {
-    // const linkRef = ref(db, `links/${user.uid}/${record.key}`)
-
-    // update(linkRef, {
-    //   title: 'testeUpdate',
-    //   url: 'flores.com.br'
-    // })
-    setLink(record)
-    console.log('edit link', record)
-  }
+  const handleEditLink = ({ record }) => setLink(record)
 
   const columns = [
     {

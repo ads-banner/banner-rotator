@@ -6,19 +6,22 @@ const useFormLink = ({
     handleToggleShowAddLink,
     link,
     user,
-    form,
   }) => {
   const [initialValues, setInitialValues] = useState()
 
-  const formReset = () => {
-    form.resetFields()
-    //setInitialValues()
-  }
-
   const handleUpdateLink = (attrs) => {
     console.log('handleUpdateLink', { attrs, link })
-    formReset()
-    handleToggleShowAddLink()
+    const linkRef = ref(db, `links/${user.uid}/${link.key}`)
+
+    update(linkRef, {
+      title: attrs.title,
+      url: attrs.url
+    }).then(() => {
+      handleToggleShowAddLink()
+    })
+    .catch((error) => {
+      console.log('nao foii!')
+    });
   }
 
   const handleAddLink = (attrs) => { 
@@ -33,7 +36,6 @@ const useFormLink = ({
     update(ref(db, 'links/' + user.uid), newLink)
     .then(() => {
       handleToggleShowAddLink()
-      formReset()
     })
     .catch((error) => {
       console.log('nao foii!')
@@ -41,7 +43,6 @@ const useFormLink = ({
   }
 
   useEffect(() => {
-    console.log('EFFFFFFFFFF', link)
     setInitialValues(link)
   }, [link])
 

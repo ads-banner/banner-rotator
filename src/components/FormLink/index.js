@@ -8,14 +8,12 @@ import {
 } from 'antd';
 
 const FormLink = ({ user, showAddLink, handleToggleShowAddLink, link }) => {
-  // console.log('Formlink', link)
-  const [form] = Form.useForm();
   const {
     handleAddLink,
     handleUpdateLink,
-    initialValues,
-  } = useFormLink({ user, handleToggleShowAddLink, link, form })
-  const isNew = initialValues.title
+    initialValues = {},
+  } = useFormLink({ user, handleToggleShowAddLink, link })
+  const isNew = !initialValues.title
 
   return <Modal
     title={isNew ? 'Cadastrar Link' : 'Editar Link'}
@@ -26,7 +24,6 @@ const FormLink = ({ user, showAddLink, handleToggleShowAddLink, link }) => {
     width={768}
   >
     <Form
-      form={form}
       // labelCol={{
       //   span: 4,
       // }}
