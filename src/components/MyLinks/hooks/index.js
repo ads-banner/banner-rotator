@@ -1,4 +1,4 @@
-import { ref, onValue } from 'firebase/database'
+import { ref, onValue, remove } from 'firebase/database'
 import { useEffect, useState } from 'react'
 import { db } from 'config/firebase'
 
@@ -7,6 +7,19 @@ const useMyLinks = ({ user, setLink }) => {
   const [links, setLinks] = useState([])
 
   const handleEditLink = ({ record }) => setLink(record)
+
+  const handleDeleteLink = ({ key }) => {
+    const linkRef = ref(db, `links/${user.uid}/${key}`)
+    const confirm = window.confirm('DESEJA DELETAR?')
+
+    confirm && remove(linkRef)
+      .then(() => {
+        console.log('removido com sucesso')
+      })
+      .catch(() => {
+        console.log('errou ao deletar, tente novamente')
+      })
+  }
 
   const columns = [
     {
@@ -28,7 +41,10 @@ const useMyLinks = ({ user, setLink }) => {
       title: 'Ações',
       key: 'action',
       render: (_, record) => (
-        <a title={record.name} onClick={() => { handleEditLink({record}) }}>Editar</a>
+        <>
+          <a title={record.name} onClick={() => { handleEditLink({ record }) }}>Editar</a> |{' '}
+          <a title={record.name} onClick={() => { handleDeleteLink({ key: record.key }) }}>Deletar</a>
+        </>
       ),
     },
   ];

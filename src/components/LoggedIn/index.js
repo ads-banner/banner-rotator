@@ -22,7 +22,6 @@ const LoggedIn = ({ currentUser, setIsLogged, setIsLoading }) => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-console.log('LOGDINNNNN',link)
   return (
     <Space className="rb-logged-in" direction="vertical" style={{ width: '100%' }} size={[0, 48]}>
       <Layout style={{ minHeight: '100vh' }}>

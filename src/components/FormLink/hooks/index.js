@@ -10,7 +10,6 @@ const useFormLink = ({
   const [initialValues, setInitialValues] = useState()
 
   const handleUpdateLink = (attrs) => {
-    console.log('handleUpdateLink', { attrs, link })
     const linkRef = ref(db, `links/${user.uid}/${link.key}`)
 
     update(linkRef, {
@@ -20,7 +19,7 @@ const useFormLink = ({
       handleToggleShowAddLink()
     })
     .catch((error) => {
-      console.log('nao foii!')
+      console.log('nao foii, tente novamente')
     });
   }
 
@@ -38,7 +37,7 @@ const useFormLink = ({
       handleToggleShowAddLink()
     })
     .catch((error) => {
-      console.log('nao foii!')
+      console.log('nao foii, tente novamente!')
     });
   }
 
