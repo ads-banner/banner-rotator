@@ -1,12 +1,19 @@
 import { auth } from 'config/firebase'
 import { signOut } from 'firebase/auth'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const useLoggedIn = ({ setIsLogged, setIsLoading }) => {
   const [showAddLink, setShowAddLink] = useState(false)
+  const [link, setLink] = useState()
 
   const handleToggleShowAddLink = () => {
+    showAddLink && setLink()
+
     setShowAddLink(!showAddLink)
+  }
+
+  const handleShowAddLink = () => {
+    setLink({})
   }
 
   const handleLogoff = () => {
@@ -16,10 +23,17 @@ const useLoggedIn = ({ setIsLogged, setIsLoading }) => {
     }).catch((error) => {});
   }
 
+  useEffect(() => {
+    link && handleToggleShowAddLink()
+  }, [link])
+
   return {
     handleLogoff,
     handleToggleShowAddLink,
+    handleShowAddLink,
     showAddLink,
+    link,
+    setLink,
   }
 }
 

@@ -12,14 +12,17 @@ const { Header, Content, Footer, Sider } = Layout;
 const LoggedIn = ({ currentUser, setIsLogged, setIsLoading }) => {
   const {
     handleToggleShowAddLink,
+    handleShowAddLink,
     showAddLink,
-    handleLogoff
+    handleLogoff,
+    link,
+    setLink,
   } = useLoggedIn({ setIsLogged, setIsLoading })
   
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-
+console.log('LOGDINNNNN',link)
   return (
     <Space className="rb-logged-in" direction="vertical" style={{ width: '100%' }} size={[0, 48]}>
       <Layout style={{ minHeight: '100vh' }}>
@@ -36,7 +39,7 @@ const LoggedIn = ({ currentUser, setIsLogged, setIsLoading }) => {
               defaultSelectedKeys={['1']}
               items={[
                 { key: 1, label: 'Home' },
-                { key: 2, label: 'Criar', onClick: handleToggleShowAddLink },
+                { key: 2, label: 'Criar', onClick: handleShowAddLink },
               ]}
             />
             <FloatButton
@@ -51,11 +54,14 @@ const LoggedIn = ({ currentUser, setIsLogged, setIsLoading }) => {
                 top: 12
               }}
             />
-            <FormLink
-              user={currentUser}
-              showAddLink={showAddLink}
-              handleToggleShowAddLink={handleToggleShowAddLink}
-            />
+            { link && 
+              <FormLink
+                user={currentUser}
+                showAddLink={showAddLink}
+                handleToggleShowAddLink={handleToggleShowAddLink}
+                link={link}
+              />
+            }
           </Header>
 
           <Content style={{ padding: '0 50px' }}>
@@ -65,7 +71,7 @@ const LoggedIn = ({ currentUser, setIsLogged, setIsLoading }) => {
             />
 
             <div style={{ background: colorBgContainer }}>
-              <MyLinks user={currentUser} />
+              <MyLinks user={currentUser} setLink={setLink} />
             </div>
           </Content>
 
