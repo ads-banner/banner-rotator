@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+body {
+  background: #f5f5f5;
+}
+
 .rb {
   min-height: 100vh;
 }

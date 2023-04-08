@@ -13,7 +13,7 @@ function App() {
         isLoading ? null :
         isLogged ?
         <LoggedIn currentUser={currentUser} setIsLogged={setIsLogged} setIsLoading={setIsLoading} /> :
-        <LoggedOut setIsLogged={setIsLogged} />
+        <LoggedOut setIsLoading={setIsLoading} />
       }
     </div>
   );

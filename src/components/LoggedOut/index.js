@@ -8,8 +8,8 @@ import logo from 'logo-banner-rotator.png'
 const { Title, Text } = Typography
 const { Footer, Content } = Layout
 
-const LoggedOut = ({ setIsLogged }) => {
-  const { handleLogin } = useLoggedOut({ setIsLogged })
+const LoggedOut = ({ setIsLoading }) => {
+  const { handleLogin } = useLoggedOut({ setIsLoading })
 
   return (
     <Layout style={{ minHeight: '100vh' }}>

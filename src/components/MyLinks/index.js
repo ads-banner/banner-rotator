@@ -1,5 +1,4 @@
 import useMyLinks from './hooks'
-
 import { Table } from 'antd'
 
 const MyLinks = ({ user }) => {
