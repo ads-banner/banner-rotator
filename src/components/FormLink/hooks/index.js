@@ -1,4 +1,5 @@
-import { getDatabase, ref, child, push, update } from 'firebase/database'
+import { ref, child, push, update } from 'firebase/database'
+import { db } from 'config/firebase'
 
 const useFormLink = ({
     handleToggleShowAddLink,
@@ -6,7 +7,6 @@ const useFormLink = ({
   }) => {
   
   const handleAddLink = (attrs) => { 
-    const db = getDatabase()
     const newKey = push(child(ref(db), 'links/' + user.uid)).key
     const newLink = {}
 

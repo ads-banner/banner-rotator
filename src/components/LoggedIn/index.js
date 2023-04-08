@@ -1,19 +1,20 @@
 import { LogoutOutlined } from '@ant-design/icons'
 import { Breadcrumb, Layout, Menu, theme, Space, FloatButton, Modal } from 'antd';
-import MyLinks from '../MyLinks'
-import FormLink from '../FormLink'
 import useLoggedIn from './hooks'
+
+import FormLink from 'components/FormLink'
+import MyLinks from 'components/MyLinks'
 
 import './style.css'
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const LoggedIn = ({ currentUser, setIsLogged }) => {
+const LoggedIn = ({ currentUser, setIsLogged, setIsLoading }) => {
   const {
     handleToggleShowAddLink,
     showAddLink,
     handleLogoff
-  } = useLoggedIn({ setIsLogged })
+  } = useLoggedIn({ setIsLogged, setIsLoading })
   
   const {
     token: { colorBgContainer },

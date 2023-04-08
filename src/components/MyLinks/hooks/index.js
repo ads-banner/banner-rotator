@@ -1,23 +1,18 @@
-import { getDatabase, ref, onValue, update } from 'firebase/database'
-import { getApp } from 'firebase/app'
+import { ref, onValue, update } from 'firebase/database'
 import { useEffect, useState } from 'react'
+import { db } from 'config/firebase'
 
 const useMyLinks = ({ user }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [links, setLinks] = useState([])
 
-  const app = getApp()
-  const db = getDatabase(app)
-
   const handleEditLink = ({ record }) => {
-    console.log('tyeste', record)
     const linkRef = ref(db, `links/${user.uid}/${record.key}`)
+
     update(linkRef, {
       title: 'testeUpdate',
-      url: 'bosta.com.br'
+      url: 'flores.com.br'
     })
-
-
   }
 
   const columns = [
@@ -56,7 +51,7 @@ const useMyLinks = ({ user }) => {
         url: link.url,
         midias: Object.keys(link.files || []).length
       }
-    })
+  })
 
   useEffect(() => {
     const linksRef = ref(db, `links/${user.uid}`)

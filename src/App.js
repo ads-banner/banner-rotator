@@ -1,17 +1,19 @@
-import LoggedIn from './components/LoggedIn';
-import LoggedOut from './components/LoggedOut';
+import LoggedIn from 'components/LoggedIn';
+import LoggedOut from 'components/LoggedOut';
 import useApp from './hooks'
 import 'antd/dist/reset.css';
 import './App.css';
 
 function App() {
-  const { isLoading, isLogged, setIsLogged, currentUser } = useApp()
+  const { isLoading, isLogged, setIsLogged, currentUser, setIsLoading } = useApp()
 
   return (
     <div className={`rb ${!isLoading ? '--hide-loading' : ''}`}>
       {
-        isLoading ? 'loading ...' :
-        isLogged ? <LoggedIn currentUser={currentUser} setIsLogged={setIsLogged} /> : <LoggedOut setIsLogged={setIsLogged} />
+        isLoading ? null :
+        isLogged ?
+        <LoggedIn currentUser={currentUser} setIsLogged={setIsLogged} setIsLoading={setIsLoading} /> :
+        <LoggedOut setIsLogged={setIsLogged} />
       }
     </div>
   );

@@ -1,13 +1,15 @@
-import './style.css'
-import useLoggedOut from './hooks'
-import logo from '../../logo-banner-rotator.png'
 import { Layout, Space, Typography, Button } from 'antd'
 import { LoginOutlined } from '@ant-design/icons'
+import useLoggedOut from './hooks'
+
+import './style.css'
+import logo from 'logo-banner-rotator.png'
+
 const { Title, Text } = Typography
 const { Footer, Content } = Layout
 
 const LoggedOut = ({ setIsLogged }) => {
-  const { handleLogin } = useLoggedOut({ setIsLogged })  
+  const { handleLogin } = useLoggedOut({ setIsLogged })
 
   return (
     <Layout style={{ minHeight: '100vh' }}>

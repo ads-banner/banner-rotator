@@ -1,9 +1,8 @@
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { auth } from 'config/firebase'
 
 const useLoggedOut = ({ setIsLogged }) => {
-  const auth = getAuth()
   const provider = new GoogleAuthProvider()
-
   provider.addScope('https://www.googleapis.com/auth/contacts.readonly')
 
   const handleLogin = () => {
@@ -11,7 +10,7 @@ const useLoggedOut = ({ setIsLogged }) => {
       .then((result) => setIsLogged(true))
       .catch((error) => {});
   }
-  
+
   return {
     handleLogin
   }
