@@ -12,10 +12,21 @@ const useFormLink = ({
 
   const handleUpdateLink = (attrs) => {
     const linkRef = ref(db, `links/${user.uid}/${link.key}`)
+    const { title, url } = attrs
+    const midias = {}
+
+    uploadFiles.forEach(file => {
+      const key = file.key || push(child(ref(db), `links/${user.uid}/${link.key}/midias`)).key
+
+      midias[key] = {
+        url: file.url
+      }
+    })
 
     update(linkRef, {
-      title: attrs.title,
-      url: attrs.url
+      title,
+      url,
+      midias,
     }).then(() => {
       handleToggleShowAddLink()
     })
@@ -48,7 +59,6 @@ const useFormLink = ({
       .catch((error) => console.log('nao foii, tente novamente!', error))
   }
 
-  const handleChangeFiles = ({ fileList }) => setUploadFiles(fileList)
   const handleOnBeforeUpload = (file) => {
     file.url = window.URL.createObjectURL(file)
     setUploadFiles([...uploadFiles, file])
@@ -58,15 +68,23 @@ const useFormLink = ({
 
   useEffect(() => {
     setInitialValues(link)
+    if (link) {
+      const keys = Object.keys(link.midias || [])
+      const parsedMidias = keys.map((key) => ({
+        key,
+        url: link.midias[key].url,
+      }))
+
+      setUploadFiles(parsedMidias)
+    }
   }, [link])
 
   return {
     handleAddLink,
     handleUpdateLink,
-    handleChangeFiles,
     handleOnBeforeUpload,
     initialValues,
-    uploadFiles
+    uploadFiles,
   }
 }
 
