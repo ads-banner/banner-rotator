@@ -15,6 +15,7 @@ const FormLink = ({ user, showAddLink, handleToggleShowAddLink, link }) => {
     handleAddLink,
     handleUpdateLink,
     handleOnBeforeUpload,
+    handleRemoveMidia,
     initialValues = {},
     uploadFiles,
   } = useFormLink({ user, handleToggleShowAddLink, link })
@@ -60,9 +61,9 @@ const FormLink = ({ user, showAddLink, handleToggleShowAddLink, link }) => {
           listType="picture-card"
           fileList={uploadFiles}
           beforeUpload={handleOnBeforeUpload}
+          onRemove={handleRemoveMidia}
         >
-          {uploadButton}
-          {/* {fileList.length >= 8 ? null : uploadButton} */}
+          {uploadFiles.length >= 6 ? null : uploadButton}
         </Upload>
       </Form.Item>
       <Form.Item label="">

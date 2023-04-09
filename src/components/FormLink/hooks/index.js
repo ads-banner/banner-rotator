@@ -1,4 +1,4 @@
-import { ref, child, push, update } from 'firebase/database'
+import { ref, child, push, update, remove } from 'firebase/database'
 import { db } from 'config/firebase'
 import { useEffect, useState } from 'react'
 
@@ -62,6 +62,19 @@ const useFormLink = ({
       .catch((error) => console.log('nao foii, tente novamente!', error))
   }
 
+  const handleRemoveMidia = (midia) => {
+    const mediaRef = ref(db, `${linkPath}/${link.key}/midias/${midia.key}`)
+    const confirm = window.confirm('DESEJA DELETAR?')
+
+    confirm && remove(mediaRef)
+      .then(() => {
+        console.log('removido com sucesso')
+
+        const newFiles = uploadFiles.filter(file => file.key !== midia.key)
+        setUploadFiles(newFiles)
+      })
+  }
+
   const handleOnBeforeUpload = (file) => {
     file.url = window.URL.createObjectURL(file)
     setUploadFiles([...uploadFiles, file])
@@ -86,6 +99,7 @@ const useFormLink = ({
     handleAddLink,
     handleUpdateLink,
     handleOnBeforeUpload,
+    handleRemoveMidia,
     initialValues,
     uploadFiles,
   }
