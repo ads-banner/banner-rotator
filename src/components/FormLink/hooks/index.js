@@ -9,24 +9,27 @@ const useFormLink = ({
   }) => {
   const [initialValues, setInitialValues] = useState()
   const [uploadFiles, setUploadFiles] = useState([])
+  const linkPath = `links/${user.uid}/`
 
   const handleUpdateLink = (attrs) => {
-    const linkRef = ref(db, `links/${user.uid}/${link.key}`)
     const { title, url } = attrs
     const midias = {}
 
     uploadFiles.forEach(file => {
-      const key = file.key || push(child(ref(db), `links/${user.uid}/${link.key}/midias`)).key
+      if (!file.key) {
+        const newKey = push(child(ref(db), `${linkPath}${link.key}/midias`)).key
 
-      midias[key] = {
-        url: file.url
+        midias[newKey] = {
+          url: file.url
+        }
       }
     })
 
-    update(linkRef, {
+    update(ref(db, `${linkPath}${link.key}/midias`), midias)
+
+    update(ref(db, `${linkPath}${link.key}`), {
       title,
       url,
-      midias,
     }).then(() => {
       handleToggleShowAddLink()
     })
@@ -36,12 +39,12 @@ const useFormLink = ({
   }
 
   const handleAddLink = (attrs) => { 
-    const newKey = push(child(ref(db), 'links/' + user.uid)).key
+    const newKey = push(child(ref(db), linkPath)).key
     const midias = {}
     const newLink = {}
 
     uploadFiles.forEach((file) => {
-      const key = push(child(ref(db), `links/${user.uid}/${newKey}/midias`)).key
+      const key = push(child(ref(db), `${linkPath}/${newKey}/midias`)).key
 
       midias[key] = {
         url: file.url
@@ -54,7 +57,7 @@ const useFormLink = ({
       midias
     }
 
-    update(ref(db, 'links/' + user.uid), newLink)
+    update(ref(db, linkPath), newLink)
       .then(() => handleToggleShowAddLink())
       .catch((error) => console.log('nao foii, tente novamente!', error))
   }
