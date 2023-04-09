@@ -35,7 +35,7 @@ const useMyLinks = ({ user, setLink }) => {
     {
       title: 'Qtd de mídias',
       dataIndex: 'midias',
-      key: 'midias',
+      key: 'midias'
     },
     {
       title: 'Ações',
@@ -58,7 +58,7 @@ const useMyLinks = ({ user, setLink }) => {
         key: key,
         title: link.title,
         url: link.url,
-        midias: Object.keys(link.files || []).length
+        midias: Object.keys(link.midias || []).length
       }
   })
 
