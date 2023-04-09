@@ -5,15 +5,33 @@ import {
   Form,
   Input,
   Modal,
-} from 'antd';
+  Upload,
+} from 'antd'
+
+import { PlusOutlined } from '@ant-design/icons'
 
 const FormLink = ({ user, showAddLink, handleToggleShowAddLink, link }) => {
   const {
     handleAddLink,
     handleUpdateLink,
+    handleOnBeforeUpload,
     initialValues = {},
+    uploadFiles,
   } = useFormLink({ user, handleToggleShowAddLink, link })
   const isNew = !initialValues.title
+
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </div>
+  );
 
   return <Modal
     title={isNew ? 'Cadastrar Link' : 'Editar Link'}
@@ -24,16 +42,8 @@ const FormLink = ({ user, showAddLink, handleToggleShowAddLink, link }) => {
     width={768}
   >
     <Form
-      // labelCol={{
-      //   span: 4,
-      // }}
-      // wrapperCol={{
-      //   span: 14,
-      // }}
-      // layout="horizontal"
-      // initialValues={initialValues}
-      // onFinish={handleUpdateLink}
-      // size="large"
+      layout="vertical"
+      size="large"
       name="style-editor-form"
       onFinish={isNew ? handleAddLink : handleUpdateLink}
       autoComplete="off"
@@ -45,7 +55,17 @@ const FormLink = ({ user, showAddLink, handleToggleShowAddLink, link }) => {
       <Form.Item name="url" label="URL pública">
         <Input />
       </Form.Item>
-      <Form.Item label=" ">
+      <Form.Item label="Mídias">
+        <Upload
+          listType="picture-card"
+          fileList={uploadFiles}
+          beforeUpload={handleOnBeforeUpload}
+        >
+          {uploadButton}
+          {/* {fileList.length >= 8 ? null : uploadButton} */}
+        </Upload>
+      </Form.Item>
+      <Form.Item label="">
         <Button type="primary" htmlType="submit">
           {isNew ? 'CADASTRAR' : 'SALVAR'}
         </Button>
