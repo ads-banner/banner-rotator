@@ -1,5 +1,5 @@
 import { ref, child, push, update, remove } from 'firebase/database'
-import { ref as refStorage, uploadBytes } from "firebase/storage";
+import { ref as refStorage, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { db, storage } from 'config/firebase'
 import { useEffect, useState } from 'react'
 
@@ -8,7 +8,7 @@ const useFormLink = ({
     link,
     user,
   }) => {
-  const [initialValues, setInitialValues] = useState()
+  const [initialValues, setInitialValues] = useState({})
   const [uploadFiles, setUploadFiles] = useState([])
   const linkPath = `links/${user.uid}/`
 
@@ -18,9 +18,9 @@ const useFormLink = ({
 
     uploadFiles.forEach(file => {
       if (!file.key) {
-        const newKey = push(child(ref(db), `${linkPath}${link.key}/midias`)).key
+        const linkKey = push(child(ref(db), `${linkPath}${link.key}/midias`)).key
 
-        midias[newKey] = {
+        midias[linkKey] = {
           url: file.url,
         }
       }
@@ -36,38 +36,26 @@ const useFormLink = ({
     })
     .catch((error) => {
       console.log('nao foii, tente novamente')
-    });
+    })
   }
 
   const handleAddLink = (attrs) => { 
-    const newKey = push(child(ref(db), linkPath)).key
-    const midias = {}
+    const linkKey = push(child(ref(db), linkPath)).key
     const newLink = {}
 
-    uploadFiles.forEach((file) => {
-      const key = push(child(ref(db), `${linkPath}/${newKey}/midias`)).key
+    sendFiles({linkKey}).then((result) => {
+      const midias = result[0].value
 
-      midias[key] = {
-        url: file.url,
-        path: `midias/${key}/${file.name}`,
+      newLink[linkKey] = {
+        title: attrs.title,
+        url: attrs.url,
+        midias,
       }
 
-      const storageRef = refStorage(storage, `midias/${key}/${file.name}`);
-
-      uploadBytes(storageRef, file).then((snapshot) => {
-        console.log('Uploaded a blob or file!', snapshot);
-      });
+      update(ref(db, linkPath), newLink)
+        .then(() => handleToggleShowAddLink())
+        .catch((error) => console.log('nao foii, tente novamente!', error))
     })
-
-    newLink[newKey] = {
-      title: attrs.title,
-      url: attrs.url,
-      midias,
-    }
-
-    update(ref(db, linkPath), newLink)
-      .then(() => handleToggleShowAddLink())
-      .catch((error) => console.log('nao foii, tente novamente!', error))
   }
 
   const handleRemoveMidia = (midia) => {
@@ -88,6 +76,35 @@ const useFormLink = ({
     setUploadFiles([...uploadFiles, file])
 
     return false
+  }
+
+  const sendFiles = ({ linkKey }) => {
+    const midias = {}
+    const promises = []
+
+    uploadFiles.forEach((file) => {
+      const key = push(child(ref(db), `${linkPath}/${linkKey}/midias`)).key
+
+      midias[key] = {
+        url: file.url,
+        path: `midias/${linkKey}/${key}/${file.name}`,
+      }
+
+      const storageRef = refStorage(storage, midias[key].path)
+
+      promises.push(
+        uploadBytes(storageRef, file)
+        .then(() =>
+          getDownloadURL(storageRef).then((url) => {
+            midias[key].url = url
+
+            return midias
+          })
+        )
+      )
+    })
+
+    return Promise.allSettled(promises)
   }
 
   useEffect(() => {
