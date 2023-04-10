@@ -10,6 +10,7 @@ const useFormLink = ({
   }) => {
   const [initialValues, setInitialValues] = useState({})
   const [uploadFiles, setUploadFiles] = useState([])
+  const [isSaving, setIsSaving] = useState(false)
   const linkPath = `links/${user.uid}/`
 
   const handleUpdateLink = (attrs) => {
@@ -39,9 +40,11 @@ const useFormLink = ({
     })
   }
 
-  const handleAddLink = (attrs) => { 
+  const handleAddLink = (attrs) => {
     const linkKey = push(child(ref(db), linkPath)).key
     const newLink = {}
+
+    setIsSaving(true)
 
     sendFiles({linkKey}).then((result) => {
       const midias = result[0].value
@@ -55,6 +58,7 @@ const useFormLink = ({
       update(ref(db, linkPath), newLink)
         .then(() => handleToggleShowAddLink())
         .catch((error) => console.log('nao foii, tente novamente!', error))
+        .finally(() => setIsSaving(false))
     })
   }
 
@@ -128,6 +132,7 @@ const useFormLink = ({
     handleUpdateLink,
     initialValues,
     isNew: !initialValues.title,
+    isSaving,
     uploadFiles,
   }
 }

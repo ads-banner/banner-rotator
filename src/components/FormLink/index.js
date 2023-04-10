@@ -18,6 +18,7 @@ const FormLink = ({ user, showAddLink, handleToggleShowAddLink, link }) => {
     handleUpdateLink,
     initialValues = {},
     isNew,
+    isSaving,
     uploadFiles,
   } = useFormLink({ user, handleToggleShowAddLink, link })
 
@@ -67,7 +68,7 @@ const FormLink = ({ user, showAddLink, handleToggleShowAddLink, link }) => {
         </Upload>
       </Form.Item>
       <Form.Item label="">
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" loading={isSaving}>
           {isNew ? 'CADASTRAR' : 'SALVAR'}
         </Button>
       </Form.Item>
