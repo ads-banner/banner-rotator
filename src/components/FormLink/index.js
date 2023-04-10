@@ -13,13 +13,13 @@ import { PlusOutlined } from '@ant-design/icons'
 const FormLink = ({ user, showAddLink, handleToggleShowAddLink, link }) => {
   const {
     handleAddLink,
-    handleUpdateLink,
     handleOnBeforeUpload,
     handleRemoveMidia,
+    handleUpdateLink,
     initialValues = {},
+    isNew,
     uploadFiles,
   } = useFormLink({ user, handleToggleShowAddLink, link })
-  const isNew = !initialValues.title
 
   const uploadButton = (
     <div>

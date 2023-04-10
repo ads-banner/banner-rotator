@@ -1,5 +1,6 @@
 import { ref, child, push, update, remove } from 'firebase/database'
-import { db } from 'config/firebase'
+import { ref as refStorage, uploadBytes } from "firebase/storage";
+import { db, storage } from 'config/firebase'
 import { useEffect, useState } from 'react'
 
 const useFormLink = ({
@@ -20,7 +21,7 @@ const useFormLink = ({
         const newKey = push(child(ref(db), `${linkPath}${link.key}/midias`)).key
 
         midias[newKey] = {
-          url: file.url
+          url: file.url,
         }
       }
     })
@@ -47,14 +48,21 @@ const useFormLink = ({
       const key = push(child(ref(db), `${linkPath}/${newKey}/midias`)).key
 
       midias[key] = {
-        url: file.url
+        url: file.url,
+        path: `midias/${key}/${file.name}`,
       }
+
+      const storageRef = refStorage(storage, `midias/${key}/${file.name}`);
+
+      uploadBytes(storageRef, file).then((snapshot) => {
+        console.log('Uploaded a blob or file!', snapshot);
+      });
     })
 
     newLink[newKey] = {
       title: attrs.title,
       url: attrs.url,
-      midias
+      midias,
     }
 
     update(ref(db, linkPath), newLink)
@@ -84,6 +92,7 @@ const useFormLink = ({
 
   useEffect(() => {
     setInitialValues(link)
+
     if (link) {
       const keys = Object.keys(link.midias || [])
       const parsedMidias = keys.map((key) => ({
@@ -97,10 +106,11 @@ const useFormLink = ({
 
   return {
     handleAddLink,
-    handleUpdateLink,
     handleOnBeforeUpload,
     handleRemoveMidia,
+    handleUpdateLink,
     initialValues,
+    isNew: !initialValues.title,
     uploadFiles,
   }
 }
