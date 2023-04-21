@@ -16,27 +16,29 @@ const useFormLink = ({
   const handleUpdateLink = (attrs) => {
     const { title, url } = attrs
     const midias = {}
+    const linkKey = link.key
 
-    uploadFiles.forEach(file => {
-      if (!file.key) {
-        const linkKey = push(child(ref(db), `${linkPath}${link.key}/midias`)).key
+    setIsSaving(true)
 
-        midias[linkKey] = {
-          url: file.url,
+    sendFiles({linkKey}).then((result) => {
+      result.forEach(r => {
+        const id = Object.keys(r.value)[0]
+
+        midias[id] = {
+          path: r.value[id].path,
+          url: r.value[id].url,
         }
-      }
-    })
+      })
 
-    update(ref(db, `${linkPath}${link.key}/midias`), midias)
+      update(ref(db, `${linkPath}${linkKey}/midias`), midias)
 
-    update(ref(db, `${linkPath}${link.key}`), {
-      title,
-      url,
-    }).then(() => {
-      handleToggleShowAddLink()
-    })
-    .catch((error) => {
-      console.log('nao foii, tente novamente')
+      update(ref(db, `${linkPath}${linkKey}`), {
+        title,
+        url,
+      })
+        .then(() => handleToggleShowAddLink())
+        .catch((error) => console.log('nao foii, tente novamente', error))
+        .finally(() => setIsSaving(false))
     })
   }
 
@@ -86,7 +88,7 @@ const useFormLink = ({
     const midias = {}
     const promises = []
 
-    uploadFiles.forEach((file) => {
+    uploadFiles.filter(file => !file.key).forEach((file) => {
       const key = push(child(ref(db), `${linkPath}/${linkKey}/midias`)).key
 
       midias[key] = {
