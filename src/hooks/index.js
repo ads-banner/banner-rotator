@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react'
 import { auth } from 'config/firebase'
 
 const useApp = () => {
+  const hasLinkId = window.location.search.indexOf('link=') > -1
   const [currentUser, setCurrentUser] = useState()
   const [isLoading, setIsLoading] = useState(true)
   const [isLogged, setIsLogged] = useState(false)
+  const [showGallery, setShowGallery] = useState(hasLinkId)
 
   useEffect(() => {
     onAuthStateChanged(auth, user => {
@@ -29,6 +31,7 @@ const useApp = () => {
     setCurrentUser,
     setIsLoading,
     setIsLogged,
+    showGallery,
   }
 }
 

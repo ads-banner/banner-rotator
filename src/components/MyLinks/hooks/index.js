@@ -31,6 +31,11 @@ const useMyLinks = ({ user, setLink }) => {
       title: 'Url pública',
       dataIndex: 'url',
       key: 'url',
+      render: (_, record) => (
+        <>
+          <a href={`/?user=${user.uid}&link=${record.key}`} target='_blank' title={record.name}>Acessar GALERIA</a>
+        </>
+      )
     },
     {
       title: 'Qtd de mídias',
