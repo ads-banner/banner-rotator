@@ -11,19 +11,19 @@ const useGallery = () => {
   const linkId = params.get('link')
   const userId = params.get('user')
 
-  const next = ({ delay }) => {
+  const next = () => {
     if (midias.length) {
       refTimeout.current = setTimeout(() => {
         const nextIndex = index + 1
         const newIndex = nextIndex === midias.length ? 0 : nextIndex
 
         setIndex(newIndex)
-      }, delay)
+      }, midias[index].duration * 1000)
     }
   }
 
   useEffect(() => {
-    next({ delay: 5000 })
+    next()
 
     return () => clearTimeout(refTimeout.current)
   }, [index, midias])
@@ -38,6 +38,7 @@ const useGallery = () => {
       const parsedMidias = keys.map((key) => ({
         key,
         url: link.midias[key].url,
+        duration: link.midias[key].duration,
       }))
 
       setMidias(parsedMidias || {})

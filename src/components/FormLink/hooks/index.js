@@ -15,20 +15,34 @@ const useFormLink = ({
 
   const handleUpdateLink = (attrs) => {
     const { title, url } = attrs
-    const midias = {}
+    // const midias = {}
     const linkKey = link.key
 
     setIsSaving(true)
 
-    sendFiles({linkKey}).then((result) => {
-      result.forEach(r => {
-        const id = Object.keys(r.value)[0]
+    console.log({attrs, link})
 
-        midias[id] = {
-          path: r.value[id].path,
-          url: r.value[id].url,
+    sendFiles({linkKey}).then((result) => {
+      const midias = result[0] && result[0].value || {}
+
+      // result.forEach(r => {
+      //   const id = Object.keys(r.value)[0]
+
+      //   midias[id] = {
+      //     path: r.value[id].path,
+      //     url: r.value[id].url,
+      //   }
+      // })
+
+      uploadFiles.filter(f => f.key).forEach(({ key, path, url, duration }) => {
+        midias[key] = {
+          path,
+          url,
+          duration,
         }
       })
+
+      console.log('update', midias)
 
       update(ref(db, `${linkPath}${linkKey}/midias`), midias)
 
@@ -94,6 +108,7 @@ const useFormLink = ({
       midias[key] = {
         url: file.url,
         path: `midias/${linkKey}/${key}/${file.name}`,
+        duration: '5',
       }
 
       const storageRef = refStorage(storage, midias[key].path)
@@ -121,6 +136,8 @@ const useFormLink = ({
       const parsedMidias = keys.map((key) => ({
         key,
         url: link.midias[key].url,
+        path: link.midias[key].path,
+        duration: link.midias[key].duration,
       }))
 
       setUploadFiles(parsedMidias)

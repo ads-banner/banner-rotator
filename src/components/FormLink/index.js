@@ -41,7 +41,7 @@ const FormLink = ({ user, showAddLink, handleToggleShowAddLink, link }) => {
     footer={null}
     open={showAddLink}
     onCancel={handleToggleShowAddLink}
-    width={768}
+    width={window.innerWidth}
   >
     <Form
       layout="vertical"
@@ -66,6 +66,21 @@ const FormLink = ({ user, showAddLink, handleToggleShowAddLink, link }) => {
         >
           {uploadFiles.length >= 6 ? null : uploadButton}
         </Upload>
+      </Form.Item>
+      <Form.Item label="Temporizador">
+        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+          {
+            uploadFiles.map((file, index) => {
+              console.log('file', file)
+              return <div style={{display: 'flex'}}>
+                <img src={file.url} style={{maxWidth: 70}} />
+                <Input type='number' max="300" defaultValue={file.duration} min={1} onChange={(e) => {
+                  file.duration = e.target.value
+                }} />
+              </div>
+            })
+          }
+        </div>
       </Form.Item>
       <Form.Item label="">
         <Button type="primary" htmlType="submit" loading={isSaving}>
